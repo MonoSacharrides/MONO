@@ -1,0 +1,158 @@
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do List</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>My Crush List</h1>
+        <input type="text" id="taskInput" placeholder="Enter a new task">
+        <button id="addTaskButton">Add Task</button>
+        <ul id="taskList"></ul>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="info.css">
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center;">INFORMATION FORM</h1>
+        <form id="info">
+            <div class="label1">
+                <div class="input-group">
+                    <label class="name" for="name">NAME:</label>
+                    <input type="text" id="name" placeholder="Enter your name">
+                    <span class="error-message" id="name-error"></span>
+                </div>
+                <br>
+
+                <div class="input-group">
+                    <label class="age" for="age">AGE:</label>
+                    <input type="number" id="age" placeholder="Enter your age (It must contain a number)">
+                    <span class="error-message" id="age-error"></span>
+                </div>
+                <br>
+
+                <div class="input-group">
+                    <label class="hobbies" for="hobbies">HOBBIES:</label>
+                    <input type="text" id="hobbies" placeholder="Enter your hobbies">
+                    <span class="error-message" id="hobbies-error"></span>
+                </div>
+            </div>
+
+            <label class="student" for="student">ARE YOU A STUDENT?</label>
+            <input class="checkbox" type="checkbox" id="student">
+            <br><br>
+
+            <button type="submit">Submit</button>
+        </form>
+        
+        <h2 id="summary-heading">Summary</h2>
+        <div id="summary">
+            <div id="summary-content"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('info').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            let name = document.getElementById('name').value.trim();
+            let age = document.getElementById('age').value.trim();
+            let hobbies = document.getElementById('hobbies').value.trim();
+            let isStudent = document.getElementById('student').checked;
+
+            document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+            document.querySelectorAll('input').forEach(el => el.classList.remove('error'));
+
+            let hasError = false;
+            
+            if (!name) {
+                document.getElementById('name-error').textContent = 'Name is required.';
+                document.getElementById('name').classList.add('error');
+                hasError = true;
+            }
+            if (!age) {
+                document.getElementById('age-error').textContent = 'Age is required.';
+                document.getElementById('age').classList.add('error');
+                hasError = true;
+            }
+            if (!hobbies) {
+                document.getElementById('hobbies-error').textContent = 'Hobbies are required.';
+                document.getElementById('hobbies').classList.add('error');
+                hasError = true;
+            }
+
+            if (hasError) {
+                return;
+            }
+
+            let summaryItem = document.createElement('div');
+            summaryItem.classList.add('summary-item');
+
+            let summaryText = document.createElement('div');
+            summaryText.classList.add('summary-text');
+            summaryText.innerHTML = `<strong>Name:</strong> <span class="editable">${name}</span> <br> <strong>Age:</strong> <span class="editable">${age}</span> <br> <strong>Hobbies:</strong> <span class="editable">${hobbies}</span> <br> <strong>Student:</strong> <span class="editable">${isStudent ? 'Yes' : 'No'}</span>`;
+            summaryItem.appendChild(summaryText);
+
+            let buttonContainer = document.createElement('div');
+            buttonContainer.classList.add('summary-buttons');
+
+            let editButton = document.createElement('button');
+            editButton.textContent = 'E';
+            editButton.classList.add('edit-button');
+            editButton.addEventListener('click', () => {
+                let editables = summaryItem.querySelectorAll('.editable');
+                editables.forEach(editable => {
+                    if (!editable.isContentEditable) {
+                        editable.contentEditable = 'true';
+                        editable.style.border = '1px solid #ccc';
+                        editable.style.padding = '5px';
+                        editable.focus();
+                    } else {
+                        editable.contentEditable = 'false';
+                        editable.style.border = 'none';
+                        editable.style.padding = '0';
+                    }
+                });
+            });
+
+            let deleteButton = document.createElement('button');
+            deleteButton.textContent = 'X';
+            deleteButton.classList.add('delete-button');
+            deleteButton.addEventListener('click', () => {
+                summaryItem.remove();
+            });
+
+
+            buttonContainer.appendChild(editButton);
+            buttonContainer.appendChild(deleteButton);
+
+            summaryItem.appendChild(buttonContainer);
+
+            document.getElementById('summary-content').appendChild(summaryItem);
+
+            document.getElementById('summary').classList.add('open');
+
+            document.getElementById('info').reset();
+        });
+
+        document.getElementById('summary-heading').addEventListener('click', function() {
+            let summary = document.getElementById('summary');
+            summary.classList.toggle('open');
+        });
+    </script>
+</body>
+</html>
